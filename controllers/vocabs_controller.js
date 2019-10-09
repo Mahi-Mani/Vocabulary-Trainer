@@ -9,16 +9,6 @@ router.get("/", function(req, res){
     res.render("index");
 })
 
-// All route
-// router.get("/api/all/words", function(req, res){
-//     connection.query("SELECT * FROM VOCABS", function(err, result){
-//         if(err) throw err;
-//         console.log(result);
-//         console.log("Server side all api");
-//         res.send(result);
-//     })
-// })
-
 // All route to get all words
 router.get("/api/all/words", function(req, res) {
     vocabs.select(function(result) {

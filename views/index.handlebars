@@ -32,7 +32,7 @@
     <div class="col-md-2"></div>
     </div>
 
-    {{!-- Table --}}
+    {{!-- Table1 --}}
     {{!-- Row --}}
     <div class="row">
         <div class="col-md-2"></div>
@@ -46,7 +46,40 @@
     </tr>
   </thead>
   <tbody>
-    
+    <td>
+    {{#each data}}
+      {{#unless MASTERED}}
+      {{> vocabs/vocab-block MASTERED=true}}
+      {{/unless}}
+  {{/each}}
+    </td>
+  </tbody>
+</table>
+</div>
+<div class="col-md-2"></div>
+</div>
+
+{{!-- Table2 --}}
+    {{!-- Row --}}
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+    <table class="table table-dark d-none"id="masteredTable">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Word</th>
+      <th scope="col">Mastered</th>
+    </tr>
+  </thead>
+  <tbody>
+    <td>
+    {{#each data}}
+      {{#unless MASTERED}}
+      {{> vocabs/vocab-block MASTERED=true}}
+      {{/unless}}
+  {{/each}}
+    </td>
   </tbody>
 </table>
 </div>
@@ -84,7 +117,14 @@
         $.get("/api/all/words", function(data){
             console.log("Inside get of all words");
             console.log(data);
-            createTable(data);
+            for(var i=0; i<data.length; i++){
+              if(!(data[i].MASTERED)){
+            createTable(data[i]);
+              }
+              else{
+                createMasteredTable(data[i]);
+              }
+            }
         })
     })
 
@@ -93,13 +133,26 @@
         $("#wordTable").removeClass("d-none");
 
     // Create table row and table data for all values
-    for(var i=0; i<data.length; i++){
     var tr = $("<tr>");
-    tr.append("<th>" + data[i].ID + "</th>");
-    tr.append("<td>" + data[i].WORD + "</td>");
-    tr.append("<td>" + data[i].MASTERED + "</td>");
+    tr.append("<th>" + data.ID + "</th>");
+    tr.append("<td>" + data.WORD + "</td>");
+    tr.append("<td>" + data.MASTERED + "</td>");
+    // TRY RENDERING THIS VALIE TO HANDLEBAR
+    tr.append("<td>" +  "<button class='mastered' data-id=data[i].ID> LEARNING </button>" + "</td>");
     $("#wordTable").append(tr);
     }
 
+    function createMasteredTable(data){
+      console.log("inside master table");
+           $("#masteredTable").removeClass("d-none");
+
+    // Create table row and table data for all values
+    var tr = $("<tr>");
+    tr.append("<th>" + data.ID + "</th>");
+    tr.append("<td>" + data.WORD + "</td>");
+    tr.append("<td>" + data.MASTERED + "</td>");
+    // TRY RENDERING THIS VALIE TO HANDLEBAR
+    tr.append("<td>" +  "<button class='mastered' data-id=data[i].ID> MASTERED </button>" + "</td>");
+    $("#masteredTable").append(tr);
     }
     </script>
