@@ -20,8 +20,32 @@
     <hr class="my-4">
     {{!-- Text area --}}
     <div class="form-group">
-    <label for="exampleFormControlTextarea1">Click on submit to add word to your vocabs</label>
-    <textarea class="form-control" id="input-word" rows="2"></textarea>
+    <label for="exampleFormControlTextarea1">Add word and category</label>
+    <textarea class="form-control" id="input-word" rows="2"></textarea><br>
+    {{!-- <div class="dropdown">
+  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    Category
+  </button>
+  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+    <a class="dropdown-item" data-category="learning"href="#">LEARNING</a>
+    <a class="dropdown-item" data-category="mastered"href="#">MASTERED</a>
+  </div>
+</div> --}}
+
+<div class="custom-control custom-radio custom-control-inline">
+  <label>
+      <input type="radio" name="optionsRadios" id="optionsRadios1" value="learning">
+      LEARNING 
+  </label>
+</div>
+
+<div class="custom-control custom-radio custom-control-inline">
+  <label>
+      <input type="radio" name="optionsRadios" id="optionsRadios2" value="mastered">
+      MASTERED 
+  </label>
+</div>
+
   </div>
 
     {{!-- <a class="btn btn-primary btn-lg" href="#" role="button"id="submit-btn">Submit</a> --}}
@@ -93,12 +117,21 @@
         $("#submit-btn").on("click", function(event){
             // To prevent page from loading
             event.preventDefault();
+            // Assigning boolean values
+            if($("input[name=optionsRadios]:checked").val() == "learning"){
+              category = 0;
+            }
+            else{
+              category = 1;
+            }
 
             // Grabbing hold of value from user input
             var newWord = {
-                    word: $("#input-word").val().trim()
+                    word: $("#input-word").val().trim(),
+                    category: category
                     };
                     console.log(newWord.word);
+                    console.log(newWord.category);
 
             // Post values
             $.ajax("/api/words", {
@@ -106,8 +139,10 @@
                 data: newWord
             }).then(function(){
                 console.log("Created new word");
+                  console.log("inside category");
+                console.log($("input[name=optionsRadios]:checked").val());
                 // To reload the page
-                // location.reload();
+                 //location.reload();
             })
         })
 
@@ -131,6 +166,9 @@
     // Function to create table for all words
     function createTable(data){
         $("#wordTable").removeClass("d-none");
+        var id = {
+         id: data.ID
+       }
 
     // Create table row and table data for all values
     var tr = $("<tr>");
@@ -138,21 +176,71 @@
     tr.append("<td>" + data.WORD + "</td>");
     tr.append("<td>" + data.MASTERED + "</td>");
     // TRY RENDERING THIS VALIE TO HANDLEBAR
-    tr.append("<td>" +  "<button class='mastered' data-id=data[i].ID> LEARNING </button>" + "</td>");
+    tr.append("<td>" +  "<button class='btn btn-danger learning' data-id=" + data.ID + "> LEARNING </button>" + "</td>");
     $("#wordTable").append(tr);
     }
 
     function createMasteredTable(data){
       console.log("inside master table");
-           $("#masteredTable").removeClass("d-none");
-
+       $("#masteredTable").removeClass("d-none");
+       var id = {
+         id: data.ID
+       }
     // Create table row and table data for all values
     var tr = $("<tr>");
     tr.append("<th>" + data.ID + "</th>");
     tr.append("<td>" + data.WORD + "</td>");
     tr.append("<td>" + data.MASTERED + "</td>");
     // TRY RENDERING THIS VALIE TO HANDLEBAR
-    tr.append("<td>" +  "<button class='mastered' data-id=data[i].ID> MASTERED </button>" + "</td>");
+    tr.append("<td>" +  "<button class='btn btn-success mastered' data-id='id'> MASTERED </button>" + "</td>");
     $("#masteredTable").append(tr);
     }
+
+// Grabbing hold of value of button inside a table
+  $(document).on("click","#wordTable tbody tr td button.btn", function() { 
+    console.log("Inside learning..");
+    var id = $(this).data("id");
+    console.log(id);
+
+    var newCatalog = {
+      catalog: 1
+    }
+
+    // Send the PUT request to update table
+    $.ajax("/api/words/" + id, {
+      type: "PUT",
+      data: newCatalog
+    }).then(
+      function(){
+        console.log("Updated");
+      }
+    )
+  });
+    
     </script>
+{{!-- 
+        var newSleep = $(this).data("newsleep");
+
+    var newSleepState = {
+      sleepy: newSleep
+    };
+
+    // Send the PUT request.
+    $.ajax("/api/cats/" + id, {
+      type: "PUT",
+      data: newSleepState
+    }).then(
+      function() {
+        console.log("changed sleep to", newSleep);
+        // Reload the page to get the updated list
+        location.reload();
+      }
+    ); --}}
+
+    {{!-- $(".btn").on("submit", function(event) {
+    event.preventDefault();
+    console.log("Inside learning..");
+    var id = $(this).data("id");
+    console.log("ID " + id);
+
+  }); --}}

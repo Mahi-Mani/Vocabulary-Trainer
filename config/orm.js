@@ -40,6 +40,18 @@ var orm = {
           }
           cb(result);
         });
+      },
+      update: function(table, id, catalog, cb) {
+        var queryString = "UPDATE ?? SET MASTERED = ? WHERE ID = ?";
+    
+        console.log(queryString);
+        connection.query(queryString, [table, catalog, id], function(err, result) {
+          if (err) {
+            throw err;
+          }
+    
+          cb(result);
+        });
       }
 }
 

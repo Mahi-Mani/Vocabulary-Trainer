@@ -19,9 +19,23 @@ router.get("/api/all/words", function(req, res) {
     });
   });
 
+//   Update table
+router.put("/api/words/:id", function(req, res){
+    var id = req.params.id;
+    var catalog = req.body.catalog;
+    vocabs.update(id, catalog, function(result) {
+        if (result.changedRows === 0) {
+          // If no rows were changed, then the ID must not exist, so 404
+          return res.status(404).end();
+        }
+        res.status(200).end();
+  
+      })
+})
+
   // Server side post script to add a new word
   router.post("/api/words", function(req, res){
-      vocabs.create(["WORD", "MASTERED"], [req.body.word, false], function(result){
+      vocabs.create(["WORD", "MASTERED"], [req.body.word, req.body.category], function(result){
           res.json({ID: result.insertId});
       })
   })

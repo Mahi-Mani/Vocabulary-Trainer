@@ -11,6 +11,11 @@ var vocabs = {
               orm.select("VOCABS", function(res){
                   cb(res);
               })
+          },
+          update: function(id, catalog, cb){
+              orm.update("VOCABS", id, catalog, function(res){
+                  cb(res);
+              })
           }
 }
 
