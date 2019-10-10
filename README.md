@@ -8,6 +8,7 @@ Application helps user to build their vocabulary skills as it would allow users 
 * User can either clone the repository or can download all files manually unzipping might take a while though
 * Package.json file has required depencies to be installed. So, user can type `npm install` to install all needed packages
 * User can type `node server.js` to run the file from command line
+* User can create database, table and insert values using `schema.sql` and `seeds.sql` file
 
 ## Technologies Used
 - HTML : Basic skeleton of application and forms
