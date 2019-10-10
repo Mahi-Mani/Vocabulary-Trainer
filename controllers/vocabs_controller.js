@@ -1,23 +1,35 @@
 var express = require("express");
 var router = express.Router();
 
-// Import the model (cat.js) to use its database functions.
+// Import the model 
 var vocabs = require("../models/vocabs.js");
 
 //   Root route
 router.get("/", function(req, res){
-    res.render("index");
+  vocabs.select(function(result) {
+    var obj = {
+      result: result
+    };
+    console.log("reult");
+    console.log(result);
+    console.log("Server side all api");
+    console.log("Inside root route");
+    console.log(obj.result);
+    // res.send(result);
+    res.render("index", obj);
+});
+    
 })
 
 // All route to get all words
-router.get("/api/all/words", function(req, res) {
-    vocabs.select(function(result) {
+// router.get("/api/all/words", function(req, res) {
+//     vocabs.select(function(result) {
         
-            console.log(result);
-            console.log("Server side all api");
-            res.send(result);
-    });
-  });
+//             console.log(result);
+//             console.log("Server side all api");
+//             res.send(result);
+//     });
+//   });
 
 //   Update table
 router.put("/api/words/:id", function(req, res){
@@ -31,6 +43,18 @@ router.put("/api/words/:id", function(req, res){
         res.status(200).end();
   
       })
+})
+
+// To delete a word
+router.delete("/api/delete/:id", function(req, res){
+  var id = req.params.id;
+  vocabs.delete(id, function(result){
+      if (result.changedRows === 0) {
+        // If no rows were changed, then the ID must not exist, so 404
+        return res.status(404).end();
+      }
+      res.status(200).end();
+  })
 })
 
   // Server side post script to add a new word

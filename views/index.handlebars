@@ -1,3 +1,4 @@
+
   <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     {{!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script> --}}
@@ -15,22 +16,13 @@
     <div class="col-md-2"></div>
     <div class="col-md-8">
     <div class="jumbotron">
-    <h1 class="display-4">Vocabulary Builder</h1>
+    <h1 class="display-4"><i class="fab fa-wordpress"></i>Vocabulary Builder</h1>
     <p class="lead">Build Your Vocabs here!</p>
     <hr class="my-4">
     {{!-- Text area --}}
     <div class="form-group">
     <label for="exampleFormControlTextarea1">Add word and category</label>
     <textarea class="form-control" id="input-word" rows="2"></textarea><br>
-    {{!-- <div class="dropdown">
-  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    Category
-  </button>
-  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-    <a class="dropdown-item" data-category="learning"href="#">LEARNING</a>
-    <a class="dropdown-item" data-category="mastered"href="#">MASTERED</a>
-  </div>
-</div> --}}
 
 <div class="custom-control custom-radio custom-control-inline">
   <label>
@@ -49,8 +41,8 @@
   </div>
 
     {{!-- <a class="btn btn-primary btn-lg" href="#" role="button"id="submit-btn">Submit</a> --}}
-    <button type="button" class="btn btn-primary"id="submit-btn">Add Word</button>
-    <button type="button" class="btn btn-primary"id="view-btn">View all Words</button>
+    <button type="button" class="btn btn-primary"id="submit-btn"><i class="fas fa-plus"></i>  Add Word</button>
+
     </div>
     </div>
     <div class="col-md-2"></div>
@@ -61,22 +53,23 @@
     <div class="row">
         <div class="col-md-2"></div>
         <div class="col-md-8">
-    <table class="table table-dark d-none"id="wordTable">
+    <table class="table table-dark"id="wordTable">
   <thead>
     <tr>
       <th scope="col">#</th>
       <th scope="col">Word</th>
-      <th scope="col">Mastered</th>
+      <th scope="col">Status</th>
+      <th scope="col">Delete</th>
     </tr>
   </thead>
   <tbody>
-    <td>
-    {{#each data}}
-      {{#unless MASTERED}}
-      {{> vocabs/vocab-block MASTERED=true}}
-      {{/unless}}
+    
+    {{#each result}}
+    {{#unless MASTERED}}
+      {{> vocabs/vocab-block MASTERED=1}}
+    {{/unless}}
   {{/each}}
-    </td>
+    {{!-- changed this cjeck again --}}
   </tbody>
 </table>
 </div>
@@ -88,20 +81,21 @@
     <div class="row">
         <div class="col-md-2"></div>
         <div class="col-md-8">
-    <table class="table table-dark d-none"id="masteredTable">
+    <table class="table table-dark"id="masteredTable">
   <thead>
     <tr>
       <th scope="col">#</th>
       <th scope="col">Word</th>
-      <th scope="col">Mastered</th>
+      <th scope="col">Status</th>
+      <th scope="col">Delete</th>
     </tr>
   </thead>
   <tbody>
     <td>
-    {{#each data}}
-      {{#unless MASTERED}}
-      {{> vocabs/vocab-block MASTERED=true}}
-      {{/unless}}
+      {{#each result}}
+    {{#if MASTERED}}
+      {{> vocabs/vocab-block MASTERED=0}}
+    {{/if}}
   {{/each}}
     </td>
   </tbody>
@@ -110,137 +104,3 @@
 <div class="col-md-2"></div>
 </div>
     </div>
-
-    {{!-- Javascript --}}
-    <script>
-        // Submit button to add a new word
-        $("#submit-btn").on("click", function(event){
-            // To prevent page from loading
-            event.preventDefault();
-            // Assigning boolean values
-            if($("input[name=optionsRadios]:checked").val() == "learning"){
-              category = 0;
-            }
-            else{
-              category = 1;
-            }
-
-            // Grabbing hold of value from user input
-            var newWord = {
-                    word: $("#input-word").val().trim(),
-                    category: category
-                    };
-                    console.log(newWord.word);
-                    console.log(newWord.category);
-
-            // Post values
-            $.ajax("/api/words", {
-                type: "POST",
-                data: newWord
-            }).then(function(){
-                console.log("Created new word");
-                  console.log("inside category");
-                console.log($("input[name=optionsRadios]:checked").val());
-                // To reload the page
-                 //location.reload();
-            })
-        })
-
-    // View all words
-    $("#view-btn").on("click", function(){
-        console.log("View all button clicked");
-        $.get("/api/all/words", function(data){
-            console.log("Inside get of all words");
-            console.log(data);
-            for(var i=0; i<data.length; i++){
-              if(!(data[i].MASTERED)){
-            createTable(data[i]);
-              }
-              else{
-                createMasteredTable(data[i]);
-              }
-            }
-        })
-    })
-
-    // Function to create table for all words
-    function createTable(data){
-        $("#wordTable").removeClass("d-none");
-        var id = {
-         id: data.ID
-       }
-
-    // Create table row and table data for all values
-    var tr = $("<tr>");
-    tr.append("<th>" + data.ID + "</th>");
-    tr.append("<td>" + data.WORD + "</td>");
-    tr.append("<td>" + data.MASTERED + "</td>");
-    // TRY RENDERING THIS VALIE TO HANDLEBAR
-    tr.append("<td>" +  "<button class='btn btn-danger learning' data-id=" + data.ID + "> LEARNING </button>" + "</td>");
-    $("#wordTable").append(tr);
-    }
-
-    function createMasteredTable(data){
-      console.log("inside master table");
-       $("#masteredTable").removeClass("d-none");
-       var id = {
-         id: data.ID
-       }
-    // Create table row and table data for all values
-    var tr = $("<tr>");
-    tr.append("<th>" + data.ID + "</th>");
-    tr.append("<td>" + data.WORD + "</td>");
-    tr.append("<td>" + data.MASTERED + "</td>");
-    // TRY RENDERING THIS VALIE TO HANDLEBAR
-    tr.append("<td>" +  "<button class='btn btn-success mastered' data-id='id'> MASTERED </button>" + "</td>");
-    $("#masteredTable").append(tr);
-    }
-
-// Grabbing hold of value of button inside a table
-  $(document).on("click","#wordTable tbody tr td button.btn", function() { 
-    console.log("Inside learning..");
-    var id = $(this).data("id");
-    console.log(id);
-
-    var newCatalog = {
-      catalog: 1
-    }
-
-    // Send the PUT request to update table
-    $.ajax("/api/words/" + id, {
-      type: "PUT",
-      data: newCatalog
-    }).then(
-      function(){
-        console.log("Updated");
-      }
-    )
-  });
-    
-    </script>
-{{!-- 
-        var newSleep = $(this).data("newsleep");
-
-    var newSleepState = {
-      sleepy: newSleep
-    };
-
-    // Send the PUT request.
-    $.ajax("/api/cats/" + id, {
-      type: "PUT",
-      data: newSleepState
-    }).then(
-      function() {
-        console.log("changed sleep to", newSleep);
-        // Reload the page to get the updated list
-        location.reload();
-      }
-    ); --}}
-
-    {{!-- $(".btn").on("submit", function(event) {
-    event.preventDefault();
-    console.log("Inside learning..");
-    var id = $(this).data("id");
-    console.log("ID " + id);
-
-  }); --}}

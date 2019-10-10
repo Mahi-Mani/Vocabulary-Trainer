@@ -16,6 +16,11 @@ var vocabs = {
               orm.update("VOCABS", id, catalog, function(res){
                   cb(res);
               })
+          },
+          delete: function(id, cb){
+              orm.delete("VOCABS", id, function(res){
+                  cb(res);
+              })
           }
 }
 

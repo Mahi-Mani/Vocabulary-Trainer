@@ -52,6 +52,12 @@ var orm = {
     
           cb(result);
         });
+      },
+      delete: function(table, id, cd){
+        var query = "DELETE FROM ?? WHERE ID = ?";
+        connection.query(query, [table, id], function(err, result){
+          if(err) throw err;
+        })
       }
 }
 
