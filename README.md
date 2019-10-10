@@ -13,16 +13,15 @@ Application helps user to build their vocabulary skills as it would allow users 
 - HTML : Basic skeleton of application and forms
 - Bootstrap : For application styling
 - Javascript : used to provide interactive effects
-- Handlebar :
-- Express :
-- MySql : 
+- Handlebar : To dynamically generate HTML page
+- MySql : Relational Database Management
 - Node : used to run javascript file outside the browser. Supports command line user input. Node is useful is different ways. As
 far as this code is concerned, utilised inquirer to dynamically prompt question to user. Used mysql npm package to create schemas.
 
 ## Application Functioning
 Type `node server.js` from command line. Funtioning of the application is shown below
 
-![Site](gifs/FriendFinder.gif) // change this
+![Site](gif/VocabularyBuilder.gif)
 
 On run of the application shows list of words available from table. User can add a new word and provide it's category of whether the word is being learnt or mastered. At any point of time, user can track their vocabulary skills on quickly swapping the words from learning and mastered table.
 
