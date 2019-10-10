@@ -15,21 +15,10 @@ router.get("/", function(req, res){
     console.log("Server side all api");
     console.log("Inside root route");
     console.log(obj.result);
-    // res.send(result);
     res.render("index", obj);
 });
     
 })
-
-// All route to get all words
-// router.get("/api/all/words", function(req, res) {
-//     vocabs.select(function(result) {
-        
-//             console.log(result);
-//             console.log("Server side all api");
-//             res.send(result);
-//     });
-//   });
 
 //   Update table
 router.put("/api/words/:id", function(req, res){
