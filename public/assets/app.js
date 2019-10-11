@@ -32,6 +32,7 @@ $(document).ready(function(){
       else{
         alert("Please enter a word");
       }
+      $("#input-word").val("");
   })
 
   // On click of mastered/learn again button
