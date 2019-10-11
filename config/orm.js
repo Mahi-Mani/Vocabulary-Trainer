@@ -1,6 +1,7 @@
 // Inport connection
 var connection = require("../config/connection.js");
 
+// Function to print question marks
 function printQuestionMarks(num) {
     var arr = [];
   
@@ -11,6 +12,7 @@ function printQuestionMarks(num) {
     return arr.toString();
   }
 
+// Object that has CRUD as keys
 var orm = {
     create: function(table, cols, vals, cb) {
         var queryString = "INSERT INTO " + table;
@@ -61,4 +63,5 @@ var orm = {
       }
 }
 
+// Export the object
 module.exports = orm;
