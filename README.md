@@ -54,28 +54,28 @@ On run of the application shows list of words available from table. User can add
 
 ```Handlebars
 <tr>
-	<td>
-		{{ID}}
-	</td>
-<td>
-	{{WORD}}
-</td>
-<td>
-	{{#if MASTERED}}
+  <td>
+   {{ID}}
+ </td>
+ <td>
+  {{WORD}}
+  </td>
+  <td>
+     {{#if MASTERED}}
 	<button class="btn btn-success mastered"id="update-btn" data-id="{{ID}}"data-category={{MASTERED}}>
-		MASTERED
+	    MASTERED
 	</button>
 	{{else}}
 	<button class="btn btn-warning mastered"id="update-btn" data-id="{{ID}}"data-category={{MASTERED}}>
-		LEARN AGAIN
+	    LEARN AGAIN
 	</button>
 	{{/if}}
-</td>
-<td>
+   </td>
+   <td>
 	<button class="btn btn-danger"id="delete-btn" data-id="{{ID}}">
-		DELETE
-	</button>
-</td>
+	  DELETE
+	</button> 
+   </td>
 </tr>
 ```
 > The above code snippet explains on how row is created for each values retrived from table. If mastered value from table is truthy, then *mastered* button is created in green color. If value is falsy, then *learn again* button is created in yellow color.
@@ -93,6 +93,9 @@ router.get("/", function(req, res){
 })
 ```
 >This is a server side javascript for the root route. The values retrived from table are being rendered to the view
+
+## Learning Points
+* Learnt about handlebars on how to dynamically update html pages in a very simple code
 
 ## Author Links
 [LinkedIn](https://www.linkedin.com/in/mahisha-gunasekaran-0a780a88/)
